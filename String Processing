@@ -1,0 +1,27 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.util.System.in);
+       
+        if (scanner.hasNextInt()) {
+            int t = scanner.nextInt();
+            
+            while (t-- > 0) {
+                String s = scanner.next();
+                int sum = 0;
+            
+                for (int i = 0; i < s.length(); i++) {
+                    char ch = s.charAt(i);
+                 
+                    if (ch >= '0' && ch <= '9') {
+                        sum += (ch - '0'); // Convert char to its numeric value
+                    }
+                }
+              
+                System.out.println(sum);
+            }
+        }
+        scanner.close();
+    }
+}
