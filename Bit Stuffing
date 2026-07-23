@@ -1,0 +1,80 @@
+#include <stdio.h>
+
+// Function to perform bit stuffing
+void bitStuffing(int input[], int inputSize, int stuffed[], int *stuffedSize) {
+    int count = 0;
+    int j = 0;
+
+    for (int i = 0; i < inputSize; i++) {
+        stuffed[j++] = input[i];
+
+        if (input[i] == 1) {
+            count++;
+        } else {
+            count = 0;
+        }
+
+        // Rule: Insert a '0' bit after five consecutive '1' bits
+        if (count == 5) {
+            stuffed[j++] = 0;
+            count = 0; // Reset counter
+        }
+    }
+    *stuffedSize = j;
+}
+
+// Function to perform bit destuffing
+void bitDestuffing(int stuffed[], int stuffedSize, int destuffed[], int *destuffedSize) {
+    int count = 0;
+    int j = 0;
+
+    for (int i = 0; i < stuffedSize; i++) {
+        destuffed[j++] = stuffed[i];
+
+        if (stuffed[i] == 1) {
+            count++;
+        } else {
+            count = 0;
+        }
+
+        // Rule: If five consecutive '1' bits are found, skip the next '0' bit
+        if (count == 5) {
+            i++; // Skip the stuffed '0' bit
+            count = 0; // Reset counter
+        }
+    }
+    *destuffedSize = j;
+}
+
+int main() {
+    // Example frame with more than 5 consecutive 1s
+    int originalData[] = {1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1};
+    int originalSize = sizeof(originalData) / sizeof(originalData[0]);
+
+    int stuffedData[100];
+    int stuffedSize = 0;
+
+    int destuffedData[100];
+    int destuffedSize = 0;
+
+    // 1. Perform Stuffing
+    bitStuffing(originalData, originalSize, stuffedData, &stuffedSize);
+
+    // 2. Perform Destuffing
+    bitDestuffing(stuffedData, stuffedSize, destuffedData, &destuffedSize);
+
+    // Display Results
+    printf("Original Data : ");
+    for (int i = 0; i < originalSize; i++) printf("%d ", originalData[i]);
+    printf("\n");
+
+    printf("Stuffed Data  : ");
+    for (int i = 0; i < stuffedSize; i++) printf("%d ", stuffedData[i]);
+    printf("\n");
+
+    printf("Destuffed Data: ");
+    for (int i = 0; i < destuffedSize; i++) printf("%d ", destuffedData[i]);
+    printf("\n");
+
+    return 0;
+}
