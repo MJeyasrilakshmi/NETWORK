@@ -1,0 +1,60 @@
+#include <stdio.h>
+#include <string.h>
+
+#define FLAG 'F'
+#define ESC  'E'
+
+// Function to perform byte stuffing
+void byteStuffing(char input[], char stuffed[]) {
+    int j = 0;
+
+    // Append starting FLAG
+    stuffed[j++] = FLAG;
+
+    for (int i = 0; input[i] != '\0'; i++) {
+        // If data contains FLAG or ESC, stuff it with an ESC byte first
+        if (input[i] == FLAG || input[i] == ESC) {
+            stuffed[j++] = ESC;
+        }
+        stuffed[j++] = input[i];
+    }
+
+    // Append ending FLAG
+    stuffed[j++] = FLAG;
+    stuffed[j] = '\0'; // Null-terminate string
+}
+
+// Function to perform byte destuffing
+void byteDestuffing(char stuffed[], char destuffed[]) {
+    int j = 0;
+    int length = strlen(stuffed);
+
+    // Loop through stuffed data, skipping the outer FLAG boundaries
+    for (int i = 1; i < length - 1; i++) {
+        // If an ESC byte is encountered, skip it and take the next literal character
+        if (stuffed[i] == ESC) {
+            i++; 
+        }
+        destuffed[j++] = stuffed[i];
+    }
+    destuffed[j] = '\0'; // Null-terminate string
+}
+
+int main() {
+    // Example data string containing raw control characters
+    char originalData[] = "A B F C E D"; 
+    char stuffedData[100];
+    char destuffedData[100];
+
+    printf("Original Data : %s\n", originalData);
+
+    // 1. Perform Byte Stuffing
+    byteStuffing(originalData, stuffedData);
+    printf("Stuffed Data  : %s\n", stuffedData);
+
+    // 2. Perform Byte Destuffing
+    byteDestuffing(stuffedData, destuffedData);
+    printf("Destuffed Data: %s\n", destuffedData);
+
+    return 0;
+}
