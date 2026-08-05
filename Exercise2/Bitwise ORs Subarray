@@ -1,0 +1,21 @@
+import java.util.HashSet;
+import java.util.Set;
+
+class Solution {
+    public int subarrayBitwiseORs(int[] arr) {
+        Set<Integer> globalOrs = new HashSet<>();
+        Set<Integer> currentOrs = new HashSet<>();
+        
+        for (int num : arr) {
+            Set<Integer> nextOrs = new HashSet<>();
+            nextOrs.add(num);
+            for (int orVal : currentOrs) {
+                nextOrs.add(orVal | num);
+            }
+            currentOrs = nextOrs;
+            globalOrs.addAll(currentOrs);
+        }
+        
+        return globalOrs.size();
+    }
+}
